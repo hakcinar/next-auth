@@ -1,9 +1,12 @@
 'use client';
 import { useUser } from '@auth0/nextjs-auth0';
+import { useSession } from 'next-auth/react';
 
 export default function Profile() {
   const { user, isLoading } = useUser();
-  console.log('User session:', user);
+
+  const data = useSession();
+  console.log('NextAuth session:', data);
   return (
     <>
       {isLoading && <p>Loading...</p>}
@@ -16,6 +19,7 @@ export default function Profile() {
           />
           <h2>{user.name}</h2>
           <p>{user.email}</p>
+          <h3>{data.status}</h3>
           <pre>{JSON.stringify(user, null, 2)}</pre>
         </div>
       )}
