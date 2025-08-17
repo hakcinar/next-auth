@@ -1,14 +1,35 @@
-import type { NextRequest } from 'next/server';
-import { auth0 } from './lib/auth0';
+import { NextResponse } from "next/server"
+import type { NextRequest } from "next/server"
+import { getToken } from "next-auth/jwt"
 
-export async function middleware(request: NextRequest) {
-  return await auth0.middleware(request);
+export async function middleware(req: NextRequest) {
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+  const { pathname } = req.nextUrl
+
+
+  if (pathname.startsWith("/login") || pathname.startsWith("/public")) {
+    return NextResponse.next()
+  }
+
+  if (!token) {
+    const loginUrl = new URL("/api/auth/signin", req.url)
+    loginUrl.searchParams.set("callbackUrl", req.nextUrl.pathname)
+    return NextResponse.redirect(loginUrl)
+  }
+
+
+  if (pathname.startsWith("/admin") && !(token.roles as string[])?.includes("Admin")) {
+    return NextResponse.redirect(new URL("/403", req.url))
+  }
+
+  return NextResponse.next()
 }
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
-    '/dashboard',
-    '/profile',
+    "/dashboard/:path*",
+    "/profile/:path*",
+    "/admin/:path*",
   ],
-};
+}
+

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { signIn, signOut, useSession } from 'next-auth/react';
 
 export default function Home() {
@@ -8,7 +8,7 @@ export default function Home() {
     <div>
       {session ? (
         <>
-          <p>Hoşgeldin {session.user.name}</p>
+          <p>Hoşgeldin {session?.user?.name}</p>
           <button onClick={() => signOut()}>Çıkış Yap</button>
         </>
       ) : (
