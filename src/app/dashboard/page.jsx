@@ -7,14 +7,14 @@ export default function DashboardPage() {
   const { data: session, status } = useSession();
   const user = session?.user;
   if (status === 'loading') {
-    return <Card title="">Yükleniyor...</Card>;
+    return <Card>Yükleniyor...</Card>;
   }
   return (
     <div className="w-full h-screen flex items-center justify-center px-6">
-      <Card title="" className="w-[600px] h-[300px] relative">
-        <h1>Burası Yöneticiler İçin Admin Sayfası</h1>
+      <Card className="w-[600px] h-[300px] relative">
+        <h1>Burası Bütün Kullanıcılar İçin Dashboard Sayfası</h1>
         <p>Hoş geldin, {user.name}!</p>
-        <p className="mb-4">Kişisel Bilgilerine Alt Taraftan Ulaşabilirsin</p>
+        <p className='mb-4'>Kişisel Bilgilerine Alt Taraftan Ulaşabilirsin</p>
         <img
           src={user.image}
           alt="Profile"
